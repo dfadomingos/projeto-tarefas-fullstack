@@ -1,53 +1,41 @@
-// src/pages/Login.jsx
 import React, { useState } from 'react';
-import axios from 'axios'; // Importamos o axios
-import { Link } from 'react-router-dom'; // Para linkar para a página de registro
+import axios from 'axios'; 
+import { Link } from 'react-router-dom';
 import './Login.css';
 
-// (Opcional) Você pode criar um CSS para esta página
-// import './Login.css'; 
-
-const Login = () => {
-  // States para guardar o email e a senha
+const Login = () => {  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(''); // State para guardar mensagens de erro
+  const [error, setError] = useState(''); 
 
-  // Função chamada quando o formulário é enviado
   const handleLogin = async (e) => {
-    e.preventDefault(); // Impede o recarregamento padrão da página
-    setError(''); // Limpa erros antigos
+    e.preventDefault(); 
+    setError(''); 
 
     try {
-      // 1. Fazer a requisição POST para o seu backend
+      //Fazendo a requisição POST para o backend
       const response = await axios.post('http://localhost:5000/api/auth/login', {
         email: email,
         password: password,
       });
-
-      // 2. Se o login for bem-sucedido, o backend enviará um token
+      
       const token = response.data.token;
 
-      // 3. Salvar o token no Local Storage do navegador
-      // (Isso "mantém" o usuário logado)
+      //Salvar o token no Local Storage do navegador, mantendo usuario logado      
       localStorage.setItem('token', token);
 
       console.log('Login com sucesso! Token:', token);
 
-      // 4. Forçar um recarregamento da página
-      // Isso fará o App.jsx reavaliar se o usuário está logado
-      // (Vamos melhorar isso depois, mas por agora funciona)
-      window.location = '/'; // Redireciona para a página principal
+      window.location = '/'; 
 
-    } catch (err) {
-      // 4. Se der erro (ex: credenciais inválidas)
+    } catch (err) {      
       console.error('Erro no login:', err.response.data.error);
       setError(err.response.data.error || 'Erro ao fazer login.');
     }
   };
 
   return (
-    <div className="login-container"> {/* Dê um estilo para isso! */}
+    <div className="login-container">
       <h1>Login</h1>
       <form onSubmit={handleLogin}>
         <div>
@@ -68,8 +56,7 @@ const Login = () => {
             required
           />
         </div>
-
-        {/* Mostra a mensagem de erro, se houver */}
+        
         {error && <p style={{ color: 'red' }}>{error}</p>}
 
         <button type="submit">Entrar</button>

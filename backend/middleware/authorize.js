@@ -1,28 +1,22 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-// Este middleware vai verificar o token
+// verificação do token
 module.exports = async (req, res, next) => {
-  try {
-    // 1. Pega o token do cabeçalho da requisição (header)
-    const jwtToken = req.header('token'); // No frontend, enviaremos como 'token'
+  try {    
+    const jwtToken = req.header('token'); 
 
-    // 2. Verifica se o token existe
+    //Verificando se o token existe
     if (!jwtToken) {
-      return res.status(403).json({ error: 'Não autorizado.' }); // 403 = Proibido
+      return res.status(403).json({ error: 'Não autorizado.' });
     }
-
-    // 3. Verifica se o token é válido
-    // Isso vai decodificar o token e verificar se ele foi assinado
-    // com o nosso JWT_SECRET.
-    // Se for válido, o 'payload' conterá { userId: ... } (que definimos no login)
+    
+    //Se token válido, o 'payload' conterá { userId: ... } 
     const payload = jwt.verify(jwtToken, process.env.JWT_SECRET);
 
-    // 4. Adiciona o ID do usuário ao objeto 'req'
-    // para que nossas rotas (CRUD) saibam *qual* usuário está fazendo a requisição.
+    //Adiciona o ID do usuário ao objeto 'req'    
     req.userId = payload.userId;
-
-    // 5. Continua para a próxima rota
+    
     next();
 
   } catch (err) {

@@ -7,42 +7,35 @@ function Dashboard(){
 
     const listaStorage = localStorage.getItem('Lista');
 
-    const [lista, setLista] = useState([]); // 1. Começamos com um array vazio
+    const [lista, setLista] = useState([]); 
     const [novoItem, setNovoItem] = useState("");
 
-    const handleLogout = () => {
-       // 1. Remove o token do armazenamento
-        localStorage.removeItem('token');
-        
-        // 2. Redireciona o usuário de volta para a página de login
+    //logout
+    const handleLogout = () => {       
+        localStorage.removeItem('token');        
         window.location = '/login';
     };
 
-    // 2. Substituímos o useEffect
-    useEffect(() => {
-    // Criamos uma função "async" aqui dentro para poder usar "await"
+    useEffect(() => {    
     const fetchTasks = async () => {
-        try {
-        // 3. Pegamos o token que salvamos no Login
+        try {        
         const token = localStorage.getItem('token');
-        if (!token) {
-            // Se não tiver token, nem tenta (embora o App.jsx já nos proteja)
+        if (!token) {            
             return;
         }
 
-        // 4. Fazemos a chamada GET para a API
+        //Fazendo a chamada GET para a API
         const response = await axios.get('http://localhost:5000/api/tasks', {
             headers: {
-            token: token // Enviamos o token no header
+            token: token
             }
         });
-
-        // 5. O backend retorna a lista de tarefas. Colocamos ela no state!
+        
         setLista(response.data);
 
         } catch (err) {
         console.error('Erro ao buscar tarefas:', err);
-        // Se o token for inválido ou expirado, o backend dará erro 403
+        //Se o token for inválido
         if (err.response && (err.response.status === 403 || err.response.status === 401)) {
             // Se o token for ruim, deslogamos o usuário
             localStorage.removeItem('token');
@@ -52,8 +45,7 @@ function Dashboard(){
     };
 
     fetchTasks();
-    }, []); // O [] vazio significa: "Rode esta função UMA VEZ quando a página carregar"
-    // ...
+    }, []); 
     
     async function adicionaItem(form) {
     form.preventDefault();
@@ -64,26 +56,23 @@ function Dashboard(){
     try {
         const token = localStorage.getItem('token');
 
-        // 1. Fazer o POST para a API
+        //Fazendo o POST para a API
         const response = await axios.post(
         'http://localhost:5000/api/tasks',
-        { description: novoItem }, // O corpo da requisição
+        { description: novoItem }, 
         {
             headers: {
-            token: token, // O token de autorização
+            token: token, 
             },
         }
         );
 
-        // 2. A API retorna a nova tarefa criada (com task_id, etc.)
+        //retornando a nova tarefa criada
         const novaTarefa = response.data;
 
-        // 3. Adicionamos a nova tarefa ao *início* da lista (melhor UI)
-        setLista([novaTarefa, ...lista]);
-
-        // 4. Limpamos o input
-        setNovoItem('');
-        // document.getElementById('input-entrada').focus(); // Corrigi um pequeno bug aqui
+        //Adicionando a nova tarefa ao *início* da lista
+        setLista([novaTarefa, ...lista]);        
+        setNovoItem('');        
 
         } catch (err) {
             console.error('Erro ao adicionar tarefa:', err);
@@ -95,15 +84,14 @@ function Dashboard(){
         const token = localStorage.getItem('token');
         const novoEstado = !estadoAtual;
 
-        // 1. Fazer a chamada PUT para a API
+        //Fazendo a chamada PUT para a API
         await axios.put(
-        `http://localhost:5000/api/tasks/${id}`, // Passa o ID na URL
-        { completed: novoEstado }, // Envia o novo estado
+        `http://localhost:5000/api/tasks/${id}`, 
+        { completed: novoEstado }, 
         { headers: { token: token } }
         );
 
-        // 2. Atualizar o estado local (para a UI ser instantânea)
-        // Encontramos a tarefa na lista e mudamos o 'completed' dela
+        //Atualiza o estado local         
         setLista(
         lista.map((tarefa) =>
             tarefa.task_id === id ? { ...tarefa, completed: novoEstado } : tarefa
@@ -118,12 +106,12 @@ function Dashboard(){
     try {
         const token = localStorage.getItem('token');
 
-        // 1. Fazer a chamada DELETE para a API
+        //Fazendo a chamada DELETE para a API
         await axios.delete(`http://localhost:5000/api/tasks/${id}`, {
         headers: { token: token },
         });
 
-        // 2. Atualizar o estado local (filtrando e removendo o item)
+        //Atualiza o estado local
         setLista(lista.filter((tarefa) => tarefa.task_id !== id));
 
         } catch (err) {
@@ -132,20 +120,20 @@ function Dashboard(){
     }
 
     async function deletaTudo() {
-    // É uma boa prática pedir confirmação para uma ação destrutiva
+    //confirmação 
     if (!window.confirm("Tem certeza que deseja deletar TODAS as tarefas?")) {
-        return; // Se o usuário clicar "Cancelar", a função para
+        return; 
     }
 
     try {
         const token = localStorage.getItem('token');
 
-        // 1. Fazer a chamada DELETE para a nossa nova rota '/all'
+        //Fazer a chamada DELETE
         await axios.delete('http://localhost:5000/api/tasks/all', {
             headers: { token: token },
         });
 
-        // 2. Atualizar o estado local (limpando o array)
+        //Atualiza o estado local
         setLista([]);
 
         } catch (err) {

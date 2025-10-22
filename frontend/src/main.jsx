@@ -1,6 +1,5 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-// import TodoList from './TodoList' 
 import App from './App' 
 import { BrowserRouter } from 'react-router-dom' 
 

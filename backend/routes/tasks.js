@@ -1,20 +1,13 @@
 const router = require('express').Router();
-const db = require('../db'); // Nosso pool de conexão
-const authorize = require('../middleware/authorize'); // Nosso middleware
+const db = require('../db'); 
+const authorize = require('../middleware/authorize'); 
 
-// Todas as rotas neste arquivo vão usar o middleware 'authorize'
-// Isso garante que o usuário esteja logado para acessar qualquer rota de tarefa.
 router.use(authorize);
 
-// --- ROTAS DO CRUD ---
-
-// 1. CREATE (Criar uma tarefa)
-// Rota: POST /api/tasks/
+//criando tarefa
 router.post('/', async (req, res) => {
   try {
-    const { description } = req.body; // Pega a descrição do frontend
-
-    // req.userId vem do nosso middleware 'authorize'
+    const { description } = req.body;     
     const userId = req.userId; 
 
     const newTask = await db.query(
@@ -30,14 +23,12 @@ router.post('/', async (req, res) => {
   }
 });
 
-// 2. READ (Ler todas as tarefas do usuário)
-// Rota: GET /api/tasks/
+//lendo tarefas do usuario
 router.get('/', async (req, res) => {
   try {
     const userId = req.userId;
 
-    const userTasks = await db.query(
-      // Vamos ordenar pelas mais recentes primeiro
+    const userTasks = await db.query(      
       'SELECT * FROM tasks WHERE user_id = $1 ORDER BY created_at DESC',
       [userId]
     );
@@ -50,23 +41,18 @@ router.get('/', async (req, res) => {
   }
 });
 
-// 3. UPDATE (Atualizar uma tarefa - ex: marcar como concluída)
-// Rota: PUT /api/tasks/:id
+//marcando tarefa como concluida
 router.put('/:id', async (req, res) => {
   try {
-    const { id } = req.params; // ID da tarefa vindo da URL
-    const { description, completed } = req.body; // Novos dados
+    const { id } = req.params; 
+    const { description, completed } = req.body; 
     const userId = req.userId;
-
-    // Primeiro, vamos apenas permitir atualizar 'completed'
-    // (Você pode expandir isso depois)
+    
     if (typeof completed !== 'boolean') {
         return res.status(400).json({ error: 'Valor de "completed" inválido.' });
     }
 
-    const updateTask = await db.query(
-      // A cláusula 'user_id = $3' garante que um usuário
-      // só possa atualizar suas PRÓPRIAS tarefas.
+    const updateTask = await db.query(      
       'UPDATE tasks SET completed = $1 WHERE task_id = $2 AND user_id = $3 RETURNING *',
       [completed, id, userId]
     );
@@ -83,14 +69,11 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// 5. DELETE ALL (Limpar todas as tarefas do usuário)
-// Rota: DELETE /api/tasks/all
+//limpando todas tarefas
 router.delete('/all', async (req, res) => {
-    try {
-        // O req.userId vem do middleware 'authorize'
+    try {        
         const userId = req.userId;
-
-        // Deleta todas as tarefas ONDE o user_id for o do usuário logado
+        
         await db.query(
             'DELETE FROM tasks WHERE user_id = $1',
             [userId]
@@ -104,15 +87,13 @@ router.delete('/all', async (req, res) => {
     }
 });
 
-// 4. DELETE (Deletar uma tarefa)
-// Rota: DELETE /api/tasks/:id
+//deletando tarefa
 router.delete('/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const userId = req.userId;
 
-        const deleteTask = await db.query(
-            // 'user_id = $2' garante que ele só delete a própria tarefa
+        const deleteTask = await db.query(            
             'DELETE FROM tasks WHERE task_id = $1 AND user_id = $2 RETURNING *',
             [id, userId]
         );
