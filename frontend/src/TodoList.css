@@ -55,6 +55,27 @@ button.add:hover{
     background: #363f88;
 }
 
+.logout-button {  
+  position: fixed; 
+  top: 20px;
+  right: 30px;  
+  border: 1px solid #ff004c;
+  background: none;
+  padding: 10px 20px;
+  color: #ff004c;
+  font-weight: bold;
+  border-radius: 5px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;  
+  transition: all 0.2s ease;
+}
+
+.logout-button:hover {
+  background: #ff004c;
+  color: white;
+}
+
 .listaTarefas {
     display: flex;
     justify-content: center;

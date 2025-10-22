@@ -10,6 +10,14 @@ function Dashboard(){
     const [lista, setLista] = useState([]); // 1. Começamos com um array vazio
     const [novoItem, setNovoItem] = useState("");
 
+    const handleLogout = () => {
+       // 1. Remove o token do armazenamento
+        localStorage.removeItem('token');
+        
+        // 2. Redireciona o usuário de volta para a página de login
+        window.location = '/login';
+    };
+
     // 2. Substituímos o useEffect
     useEffect(() => {
     // Criamos uma função "async" aqui dentro para poder usar "await"
@@ -147,7 +155,8 @@ function Dashboard(){
 
     return (
         <div>
-            <h1>Lista de Tarefas</h1>
+            <button onClick={handleLogout} className="logout-button">Logout</button>
+            <h1>Lista de Tarefas</h1>            
             <form className="task-form" onSubmit={adicionaItem}>
                 <input
                 id="input-entrada"
