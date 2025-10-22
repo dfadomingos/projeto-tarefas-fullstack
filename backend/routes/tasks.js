@@ -83,6 +83,27 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+// 5. DELETE ALL (Limpar todas as tarefas do usuário)
+// Rota: DELETE /api/tasks/all
+router.delete('/all', async (req, res) => {
+    try {
+        // O req.userId vem do middleware 'authorize'
+        const userId = req.userId;
+
+        // Deleta todas as tarefas ONDE o user_id for o do usuário logado
+        await db.query(
+            'DELETE FROM tasks WHERE user_id = $1',
+            [userId]
+        );
+
+        res.json({ message: 'Todas as tarefas foram deletadas com sucesso.' });
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Erro no servidor');
+    }
+});
+
 // 4. DELETE (Deletar uma tarefa)
 // Rota: DELETE /api/tasks/:id
 router.delete('/:id', async (req, res) => {
@@ -107,5 +128,6 @@ router.delete('/:id', async (req, res) => {
         res.status(500).send('Erro no servidor');
     }
 });
+
 
 module.exports = router;
