@@ -13,7 +13,7 @@ function Dashboard(){
     //logout
     const handleLogout = () => {       
         localStorage.removeItem('token');        
-        window.location = '/login';
+        window.location = 'projeto-tarefas-fullstack.vercel.app/login';
     };
 
     useEffect(() => {    
