@@ -36,7 +36,9 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <h1>Login</h1>
+      <h1 className="mensagem-bemvindo">Bem-vindo! </h1>      
+      <h1 className="mensagem-bemvindo">Faça o login para acessar sua lista de tarefas.
+      </h1>      
       <form onSubmit={handleLogin}>
         <div>
           <label>Email</label>

@@ -1,3 +1,17 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.mensagem-bemvindo {   
+  color: #7d83b9;    
+  text-align: center; 
+  max-width: 500px;    
+  line-height: 1.4; 
+  font-weight: 900   
+}
+
 .login-container {
   display: flex;
   flex-direction: column;
@@ -9,7 +23,7 @@
 }
 
 .login-container h1 {
-  font-size: 2.5rem;
+  font-size: 1.9rem;
   margin-bottom: 20px;
 }
 
@@ -22,6 +36,7 @@
   padding: 20px;
   background-color: #3a3f4a;
   border-radius: 8px;
+  margin-top: 10px;
 }
 
 .login-container form div {
