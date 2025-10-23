@@ -14,7 +14,7 @@ const Login = () => {
 
     try {
       //Fazendo a requisição POST para o backend
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
+      const response = await axios.post('https://minha-api-tarefas-bb3k.onrender.com/api/auth/login', {
         email: email,
         password: password,
       });

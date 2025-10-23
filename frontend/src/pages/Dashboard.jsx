@@ -25,7 +25,7 @@ function Dashboard(){
         }
 
         //Fazendo a chamada GET para a API
-        const response = await axios.get('http://localhost:5000/api/tasks', {
+        const response = await axios.get('https://minha-api-tarefas-bb3k.onrender.com/api/tasks', {
             headers: {
             token: token
             }
@@ -58,7 +58,7 @@ function Dashboard(){
 
         //Fazendo o POST para a API
         const response = await axios.post(
-        'http://localhost:5000/api/tasks',
+        'https://minha-api-tarefas-bb3k.onrender.com/api/tasks',
         { description: novoItem }, 
         {
             headers: {
@@ -86,7 +86,7 @@ function Dashboard(){
 
         //Fazendo a chamada PUT para a API
         await axios.put(
-        `http://localhost:5000/api/tasks/${id}`, 
+        `https://minha-api-tarefas-bb3k.onrender.com/api/tasks/${id}`, 
         { completed: novoEstado }, 
         { headers: { token: token } }
         );
@@ -107,7 +107,7 @@ function Dashboard(){
         const token = localStorage.getItem('token');
 
         //Fazendo a chamada DELETE para a API
-        await axios.delete(`http://localhost:5000/api/tasks/${id}`, {
+        await axios.delete(`https://minha-api-tarefas-bb3k.onrender.com/api/tasks/${id}`, {
         headers: { token: token },
         });
 
@@ -129,7 +129,7 @@ function Dashboard(){
         const token = localStorage.getItem('token');
 
         //Fazer a chamada DELETE
-        await axios.delete('http://localhost:5000/api/tasks/all', {
+        await axios.delete('https://minha-api-tarefas-bb3k.onrender.com/api/tasks/all', {
             headers: { token: token },
         });
 

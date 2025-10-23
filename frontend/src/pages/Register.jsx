@@ -23,7 +23,7 @@ const Register = () => {
 
     try {
       //Chamando o endpoint de REGISTRO
-      const response = await axios.post('http://localhost:5000/api/auth/register', {
+      const response = await axios.post('https://minha-api-tarefas-bb3k.onrender.com/api/auth/register', {
         name: name,
         email: email,
         password: password,
